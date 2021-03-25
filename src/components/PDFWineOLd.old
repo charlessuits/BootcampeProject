@@ -1,0 +1,356 @@
+import React, { Component } from 'react';
+import { PDFDownloadLink, Link, PDFViewer, Image,  Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer'
+import TastingsApp from './Tastings';
+import Tabletop from 'tabletop';
+
+
+class PDFWineTasting extends Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+          data: [],
+          stuff: ""
+        }
+    }
+  
+  getData() {
+      // alert("here")
+        Tabletop.init( {
+          key: 'https://docs.google.com/spreadsheets/d/1Ig8eqduMOcTv2zf0SepzBJLpEVdXgsb4zoPpsGX7xDA/edit#gid=917834120',
+          simpleSheet: true }
+        ).then(wineList => {
+          //   console.log(wineList);
+          this.setState({data: wineList });
+      });
+     
+          
+  }
+    componentDidMount() {
+       this.getData();
+       var items = this.state.data;
+       if (items.length)
+       {
+          var stuff = RenderTastings(items);
+          alert("Setting");
+          this.setState({stuff: stuff });
+      
+       }
+       
+         
+    }
+  
+    render() {
+       return (
+       
+        <div className="container-fluid">
+          <div>
+          <PDFDownloadLink document={<WineCreatePDF items={this.state.data} stuff={this.state.stuff} />} fileName="tasting.pdf">
+                    {({ blob, url, loading, error }) => (loading ? 'Loading document...' : 'Download now!')}
+                </PDFDownloadLink>
+          </div>
+          <PDFViewer width="100%" height="600px">
+              <WineCreatePDF items={this.state.data} stuff={this.state.stuff} />
+              
+          </PDFViewer>
+        </div>
+       
+    );
+}
+
+}
+
+
+function RenderTastings(props) {
+
+  alert('inside');
+if (props.items.length) {
+
+alert(props.items[0].WineName);
+return(
+
+<View>
+  
+  {props.items.map((item1) => {
+      return(
+          <View>
+          <Text> kdsjfslkjflsdjf</Text>
+         
+              <Text style={{marginLeft: "70", fontSize: "12", color: "#040404",   textAlign: 'left'}}>
+                  {item1.WineName} test
+              </Text>
+          </View>
+      );
+
+  }
+)}
+</View>
+);
+}
+
+
+}
+
+function WineCreatePDF(props) {
+console.log(props.items);
+const output1 = props.items;
+const stuff = props.stuff;
+console.log(output1);
+alert(output1.length);
+        if (output1.length)
+        {
+          // alert(output1[0].WineName);
+          
+          return(
+           <React.Fragment>
+            
+               <Document>
+                   <Page size="Letter" wrap={true} style={{ backgroundColor: 'white', leftMargin: "20", RightMargin: "20" }}>
+                      <View>
+                        <Text>D {stuff}</Text>
+                      </View>
+                  </Page>      
+               </Document>
+              
+           </React.Fragment>
+           
+   
+       );
+      }
+       else
+       return(
+        <React.Fragment>
+         
+            <Document>
+                <Page size="Letter" wrap={true} style={{ backgroundColor: 'white', leftMargin: "20", RightMargin: "20" }}>
+                   <View>
+                     <Text>treter</Text>
+                   </View>
+               </Page>      
+            </Document>
+           
+        </React.Fragment>
+        
+
+    );
+   
+}
+const styles = StyleSheet.create({
+  header: {
+    borderTopWidth: 4,
+    borderTopColor: '#0084B4',
+    color: '#898989',
+    padding: 20,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  headerCenter: {
+    textAlign: 'center',
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 32,
+    fontWeight: 900,
+    lineHeight: 1,
+    color: '#0084B4',
+  //   fontFamily: 'Ariel',
+  },
+  headerLeft: {
+    textAlign: 'left',
+    flex: 1,
+    alignSelf: 'center',
+    fontSize: 32,
+    fontWeight: 900,
+    lineHeight: 1,
+    color: '#0084B4',
+  //   fontFamily: 'Ariel',
+  },
+  headerRight: {
+    textAlign: 'right',
+    fontSize: 12,
+    flex: 1,
+  //   fontFamily: 'Ariel',
+  },
+  skill: {
+    textAlign: 'left',
+    fontsize: 10,
+    flex: 1,
+    color: '#5c250a'
+  },
+  skillBold: {
+    textAlign: 'left',
+    fontsize: 12,
+    flex: 1,
+    color: "black",
+    fontWeight: "bold"
+  },
+  ribbon: {
+    backgroundColor: '#0084B4',
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 10,
+    marginBottom: 10,
+    textAlign: 'center',
+    color: '#FFF',
+  },
+  ribbonSkill: {
+    backgroundColor: '#ede4e4',
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 20,
+    marginBottom: 20,
+    color: '#FFF',
+  },
+  ribbonEducation: {
+      backgroundColor: '00E4E4',
+      display: 'flex',
+      flexDirection: 'row',
+      padding: 20,
+      marginBottom: 20,
+      textAlign: 'center',
+      color: '#FFF',
+    },
+  ribbon: {
+      backgroundColor: '#0084B4',
+      display: 'flex',
+      flexDirection: 'row',
+      padding: 20,
+      marginBottom: 20,
+      textAlign: 'center',
+      color: '#FFF',
+    },
+  ribbonGrey: {
+    backgroundColor: '#EDEDED',
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 20,
+    marginBottom: 20,
+    textAlign: 'center',
+    color: '#0084B4',
+  },
+  imageHead: {
+    width: "100px"
+  },
+  imageWidth: {
+    width: "100%"
+  },
+  ribbonBox: {
+    width: '100%',
+    color: '#ffffff'
+  },
+  companyName: {
+      fontsize: "12",
+      width: "100%",
+      color: '#ffffff'
+  },
+  titleBox: {
+      fontsize: "16",
+      width: "100%",
+      color: '#ffffff'
+  },
+  experLine: {
+      fontsize: 13,
+      color: '#903030',
+      flex: 1,
+      textAlign: "left"
+  },
+  ribbonLabel: {
+    fontSize: 14,
+  //   fontFamily: 'KadwaBold',
+  },
+  ribbonValue: {
+    fontSize: 28,
+  //   fontFamily: 'KadwaBold',
+  },
+
+  table: {
+    paddingHorizontal: 20,
+    display: 'flex',
+    marginBottom: 20,
+  },
+  tableRowA: {
+    backgroundColor: '#EDEDED',
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 10,
+  },
+  tableRowB: {
+    padding: 10,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  serviceName: {
+    fontSize: 10,
+    width: '25%',
+    fontFamily: 'KadwaBold',
+  },
+  serviceDescription: {
+    fontSize: 10,
+    width: '50%',
+    fontFamily: 'MontserratRegular',
+  },
+  serviceAmount: {
+    fontSize: 20,
+    width: '25%',
+    textAlign: 'right',
+    fontFamily: 'KadwaBold',
+  },
+  tableHeadingA: {
+    width: '100%',
+    fontSize: 14,
+    color: '#B06060',
+    padding: 10
+  //   fontFamily: 'KadwaBold',
+  },
+  tableHeadingB: {
+    width: '50%',
+    fontSize: 14,
+    color: '#0084B4',
+    fontFamily: 'KadwaBold',
+  },
+  tableHeadingC: {
+    width: '25%',
+    textAlign: 'right',
+    fontSize: 14,
+    color: '#0084B4',
+    fontFamily: 'KadwaBold',
+  },
+  summary: {
+    backgroundColor: '#0084B4',
+    color: '#FFF',
+    padding: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  summaryMeta: {
+    width: '75%',
+    fontFamily: 'KadwaBold',
+  },
+  summaryAmount: {
+    fontSize: 20,
+    width: '25%',
+    textAlign: 'right',
+    fontFamily: 'KadwaBold',
+  },
+
+  howToPay: {
+    paddingHorizontal: 20,
+    textAlign: 'center',
+    fontSize: 20,
+    color: '#0084B4',
+    fontFamily: 'KadwaBold',
+  },
+
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
+    borderTopColor: '#EDEDED',
+    borderTopWidth: 1,
+    textAlign: 'center',
+    fontSize: 10,
+  //   fontFamily: 'MontserratRegular',
+  },
+});
+export default PDFWineTasting;
